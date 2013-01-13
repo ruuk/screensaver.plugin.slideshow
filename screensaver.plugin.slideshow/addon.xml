@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="screensaver.plugin.slideshow" name="Plugin Slideshow" version="0.0.1" provider-name="ruuk">
+	<extension point="xbmc.ui.screensaver" library="default.py"/>
+	<extension point="xbmc.service" library="service.py" start="login"></extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Screensaver that displays an image slideshow from a plugin</summary>
+		<description lang="en">The Slideshow screensaver will show you a slide show of images using various transition effects. It can be configured to show your libraries music or video fanart, or a custom folder of images</description>
+		<platform>all</platform>
+	</extension>
+</addon>
