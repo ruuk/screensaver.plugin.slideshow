@@ -22,7 +22,7 @@ def checkStartup():
 	else:
 		log('DISABLED')
 
-
+log('Version: ' + __addon__.getAddonInfo('version'))
 log('CHECK')
 checkStartup()
 log('DONE')

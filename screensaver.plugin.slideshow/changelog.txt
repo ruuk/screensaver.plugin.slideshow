@@ -1,6 +1,12 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.1
+Current Version : 0.0.2
+
+** 0.0.2 ***
+
+Added version printing to log
+Now cleans up classes on exit
+Cleared some unused code
 
 ** 0.0.1 ***
 

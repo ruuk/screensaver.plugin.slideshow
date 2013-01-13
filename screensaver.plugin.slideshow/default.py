@@ -3,21 +3,22 @@ import xbmcaddon, random
 import xbmcgui, xbmc, os
 
 #Most of the screensaver code was taken from the screensaver.xbmc.slideshow addon, so thanks for that go to the authors at Team XBMC
+
 if 'xbmcplugin' in sys.modules:
-	oldxbmcplugin = sys.modules['xbmcplugin']
 	del(sys.modules["xbmcplugin"])
 import xbmcplugin
 xbmcplugin.reset()
 	
 __addon__	= xbmcaddon.Addon()
 __addonid__  = __addon__.getAddonInfo('id')
-__cwd__	  = __addon__.getAddonInfo('path').decode("utf-8")
 
 def log(txt):
 	if isinstance (txt,str):
 		txt = txt.decode("utf-8")
 	message = u'%s: %s' % (__addonid__, txt)
-	xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
+	xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGNOTICE)
+
+log('Version: ' + __addon__.getAddonInfo('version'))
 
 class Screensaver(xbmcgui.WindowXMLDialog):
 	def __init__( self, *args, **kwargs ):
@@ -131,8 +132,7 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1 and sys.argv[1] == 'resetpath':
 		__addon__.setSetting('path','addons://sources/image')
 	else:
-		screensaver_gui = Screensaver('plugin-slideshow-screensaver.xml', __cwd__, 'default')
-		screensaver_gui.doModal()
-		del screensaver_gui
-		sys.modules.clear()
+		Screensaver('plugin-slideshow-screensaver.xml', __addon__.getAddonInfo('path'), 'default').doModal()
+		del Screensaver
+		del MyMonitor
 

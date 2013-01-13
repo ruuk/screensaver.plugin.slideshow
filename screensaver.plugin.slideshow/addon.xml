@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="screensaver.plugin.slideshow" name="Plugin Slideshow" version="0.0.1" provider-name="ruuk">
+<addon id="screensaver.plugin.slideshow" name="Plugin Slideshow" version="0.0.2" provider-name="ruuk">
 	<extension point="xbmc.ui.screensaver" library="default.py"/>
 	<extension point="xbmc.service" library="service.py" start="login"></extension>
 	<extension point="xbmc.addon.metadata">
