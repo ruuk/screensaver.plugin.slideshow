@@ -1,4 +1,3 @@
-normxbmcplugin = None
 addonID = None
 import xbmcaddon
 
@@ -228,4 +227,4 @@ def setProperty(handle, key, value):
 	Example:
 		xbmcplugin.setProperty(int(sys.argv[1]), 'Emulator', 'M.A.M.E.')
 	"""
-	return normxbmcplugin.setProperty(handle,key,value)
+	pass

@@ -8,7 +8,6 @@ if 'xbmcplugin' in sys.modules:
 	del(sys.modules["xbmcplugin"])
 import xbmcplugin
 xbmcplugin.reset()
-xbmcplugin.normxbmcplugin = oldxbmcplugin
 	
 __addon__	= xbmcaddon.Addon()
 __addonid__  = __addon__.getAddonInfo('id')
@@ -44,7 +43,6 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.slideshow_dim = hex(int('%.0f' % (float(__addon__.getSetting('level')) * 2.55)))[2:] + 'ffffff' # convert float to hex value usable by the skin
 
 	def items(self):
-		#addonName = 'plugin.image.flickr'
 		addonName = self.slideshow_path.split('://')[-1].split('/')[0]
 		xbmcplugin.addonID = addonName
 		localAddonsPath = os.path.join(xbmc.translatePath('special://home'),'addons')
@@ -54,9 +52,8 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			sys.argv.append(1)
 		if len(sys.argv) < 3:
 			sys.argv.append('test')
-		#sys.argv[2] = '?mode=1&url=slideshow&name=photostream'
-		sys.argv[2] = '?' + self.slideshow_path.split('?')[-1]
-		print sys.argv[2]
+		sys.argv[2] = '?' + self.slideshow_path.split('?')[-1] + '&plugin_slideshow_ss=true'
+		#print sys.argv[2]
 		sys.path.insert(0,addonPath)
 		execfile(defaultpyPath,globals())
 		items = xbmcplugin.FINAL_ITEMS
@@ -132,7 +129,7 @@ class MyMonitor(xbmc.Monitor): #@UndefinedVariable
 		
 if __name__ == '__main__':
 	if len(sys.argv) > 1 and sys.argv[1] == 'resetpath':
-		__addon__.setSetting('path','')
+		__addon__.setSetting('path','addons://sources/image')
 	else:
 		screensaver_gui = Screensaver('script-python-slideshow.xml', __cwd__, 'default')
 		screensaver_gui.doModal()

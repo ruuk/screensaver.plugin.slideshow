@@ -14,6 +14,7 @@ def checkStartup():
 		log('STARTING')
 		url = __addon__.getSetting('path')
 		url = url.replace('/?','?')
+		url += '&plugin_slideshow_ss=true'
 		log('Slideshow URL: %s' % url)
 		randomize = ''
 		if __addon__.getSetting('randomize') == 'true': randomize = 'random'
