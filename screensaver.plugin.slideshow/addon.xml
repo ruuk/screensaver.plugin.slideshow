@@ -4,7 +4,7 @@
 	<extension point="xbmc.service" library="service.py" start="login"></extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Screensaver that displays an image slideshow from a plugin</summary>
-		<description lang="en">The Slideshow screensaver will show you a slide show of images using various transition effects. It can be configured to show your libraries music or video fanart, or a custom folder of images</description>
+		<description lang="en">The Slideshow screensaver will show you a slide show of images using various transition effects. It can be configured to show images from image plugins installed on XBMC</description>
 		<platform>all</platform>
 	</extension>
 </addon>
