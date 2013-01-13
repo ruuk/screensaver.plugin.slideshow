@@ -131,7 +131,7 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1 and sys.argv[1] == 'resetpath':
 		__addon__.setSetting('path','addons://sources/image')
 	else:
-		screensaver_gui = Screensaver('script-python-slideshow.xml', __cwd__, 'default')
+		screensaver_gui = Screensaver('plugin-slideshow-screensaver.xml', __cwd__, 'default')
 		screensaver_gui.doModal()
 		del screensaver_gui
 		sys.modules.clear()
