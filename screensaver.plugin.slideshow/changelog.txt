@@ -1,6 +1,14 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.3
+Current Version : 0.0.4
+
+** 0.0.4 ***
+
+Added the ability to use ShareSocial image feeds (Only works with Facebook-Media 0.7.8 at this time and requires ShareSocial 0.2.0 or greater to be installed)
+Improved slideshow image loading (now loads next image while displaying current image, so less instance of black screen)
+Improved the settings dialog
+Added loading indicator and message while waiting for images to load
+Added error indicator and message if error occurs while loading images
 
 ** 0.0.3 ***
 

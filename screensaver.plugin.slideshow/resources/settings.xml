@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
-  <setting label="30001" type="folder" source="pictures" id="path" default="addons://sources/image"/>
-  <setting label="30011" type="action" action="RunScript(screensaver.plugin.slideshow,resetpath)"/>
+  <setting label="30001" type="action" action="RunScript(screensaver.plugin.slideshow,choosestream)" id="path"/>
   <setting label="30002" type="enum" id="time" default="4" values="1|2|3|4|5|6|7|8|9|10"/>
   <setting label="30003" type="slider" id="level" range="0,1,100" option="percent" default="100"/>
   <setting label="30004" type="enum" id="effect" default="2" lvalues="30006|30007|30005"/>

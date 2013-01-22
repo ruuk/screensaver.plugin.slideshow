@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- All %s must remain in string but can change position -->
-    <string id="30001">Plugin Path</string>
+    <string id="30001">Source Path</string>
     <string id="30002">Amount Of Seconds To Display Each Image</string>
 	<string id="30003">Dim Level</string>
 	<string id="30004">Effect</string>
@@ -11,4 +11,6 @@
 	<string id="30010">Slideshow On XBMC Startup</string>
 	<string id="30011">Reset Path (Necessary to change Plugin Path)</string>
 	<string id="30012">Randomize Order</string>
+	<string id="30015">Plugin</string>
+	<string id="30016">ShareSocial Imagestream</string>
 </strings>
