@@ -68,7 +68,7 @@ def addDirectoryItem(handle, url, listitem, isFolder=False, totalItems=0):
 	if isFolder:
 		FOLDERS.append(url)
 	else:
-		ITEMS.append(url)
+		ITEMS.append({'url':url,'title':listitem.getLabel()})
 	return bool
 
 #noinspection PyUnusedLocal

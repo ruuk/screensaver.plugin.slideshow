@@ -11,14 +11,21 @@ def log(txt):
 	
 def checkStartup():
 	if __addon__.getSetting('onstart') == 'true':
-		log('STARTING')
 		url = __addon__.getSetting('path')
-		url = url.replace('/?','?')
-		url += '&plugin_slideshow_ss=true'
-		log('Slideshow URL: %s' % url)
-		randomize = ''
-		if __addon__.getSetting('randomize') == 'true': randomize = 'random'
-		xbmc.executebuiltin('SlideShow(%s,%s)' % (url,randomize))
+		if __addon__.getSetting('xbmc_slideshow') == 'true' and url.startswith('plugin:'):
+			log('STARTING')
+			url = url.replace('/?','?')
+			url += '&plugin_slideshow_ss=true'
+			log('Slideshow URL: %s' % url)
+			randomize = ''
+			if __addon__.getSetting('randomize') == 'true': randomize = 'random'
+			xbmc.executebuiltin('SlideShow(%s,%s)' % (url,randomize))
+		else:
+			log('STARTING')
+			from pluginscreensaver import Screensaver
+			Screensaver('plugin-slideshow-screensaver.xml', __addon__.getAddonInfo('path'), 'default').doModal()
+			del Screensaver
+			
 	else:
 		log('DISABLED')
 

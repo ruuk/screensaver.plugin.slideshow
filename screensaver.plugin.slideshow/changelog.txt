@@ -1,6 +1,12 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.4
+Current Version : 0.0.5
+
+** 0.0.5 ***
+
+Added option in settings 'Show Titles (If Available)'
+Error indicator and message now moves randomly about screen (this is a screensaver, not a screen burner =] )
+Added option in settings under 'Slideshow On XBMC Startup': 'Normal XBMC Slideshow (Plugins Only)'. When checked and path is a plugin, will start with an xbmc slideshow (old behavior). If unchecked (default) will start with the normal screensaver behavior. 
 
 ** 0.0.4 ***
 

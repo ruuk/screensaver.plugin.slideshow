@@ -5,5 +5,7 @@
   <setting label="30003" type="slider" id="level" range="0,1,100" option="percent" default="100"/>
   <setting label="30004" type="enum" id="effect" default="2" lvalues="30006|30007|30005"/>
   <setting id="randomize" type="bool" label="30012" default="true" />
+  <setting id="titles" type="bool" label="30013" default="false" />
   <setting id="onstart" type="bool" label="30010" default="false" />
+  <setting id="xbmc_slideshow" type="bool" label="30014" default="false" enable="eq(-1,true)"/>
 </settings>

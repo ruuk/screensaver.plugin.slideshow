@@ -11,6 +11,8 @@
 	<string id="30010">Slideshow On XBMC Startup</string>
 	<string id="30011">Reset Path (Necessary to change Plugin Path)</string>
 	<string id="30012">Randomize Order</string>
+	<string id="30013">Show Titles (If Available)</string>
+	<string id="30014">- Normal XBMC Slideshow (Plugins Only)</string>
 	<string id="30015">Plugin</string>
 	<string id="30016">ShareSocial Imagestream</string>
 </strings>

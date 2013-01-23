@@ -6,8 +6,8 @@ import xbmcgui, xbmc, os
 
 if 'xbmcplugin' in sys.modules:
 	del(sys.modules["xbmcplugin"])
-import xbmcplugin
-xbmcplugin.reset()
+import fakexbmcplugin
+fakexbmcplugin.reset()
 	
 __addon__	= xbmcaddon.Addon()
 __addonid__  = __addon__.getAddonInfo('id')
@@ -29,6 +29,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.conts()
 		items = None
 		try:
+			#raise Exception('Test Exception')
 			items = self.items()
 			self.getControl(10).setVisible(False)
 		except:
@@ -48,8 +49,15 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		error = 'ERROR: %s' % msg
 		self.getControl(101).setLabel(error)
 		log(error)
+		cont = self.getControl(10)
+		x = 608 ; y=328
 		while (not xbmc.abortRequested) and (not self.stop):
 			xbmc.sleep(1000)
+			if xbmc.abortRequested or self.stop: break
+			xbmc.sleep(1000)
+			x = random.randint(16,1200)
+			y = random.randint(16,440)
+			cont.setPosition(x,y)
 			
 	def conts(self):
 		self.winid = xbmcgui.getCurrentWindowDialogId()
@@ -57,17 +65,19 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.Monitor = MyMonitor(action = self.exit)
 		self.image1 = self.getControl(1)
 		self.image2 = self.getControl(2)
+		self.title = self.getControl(200)
 		self.slideshow_type = __addon__.getSetting('type')
 		self.slideshow_path = __addon__.getSetting('path')
 		self.slideshow_effect = __addon__.getSetting('effect')
 		self.slideshow_random = __addon__.getSetting('randomize') == 'true'
+		self.slideshow_titles = __addon__.getSetting('titles') == 'true'
 		self.slideshow_time = (int('%02d' % int(__addon__.getSetting('time'))) + 1) * 1000
 		self.slideshow_dim = hex(int('%.0f' % (float(__addon__.getSetting('level')) * 2.55)))[2:] + 'ffffff' # convert float to hex value usable by the skin
 
 	def items(self):
 		if self.slideshow_path.startswith('plugin://'):
 			addonName = self.slideshow_path.split('://')[-1].split('/')[0]
-			xbmcplugin.addonID = addonName
+			fakexbmcplugin.addonID = addonName
 			localAddonsPath = os.path.join(xbmc.translatePath('special://home'),'addons')
 			addonPath = os.path.join(localAddonsPath,addonName)
 			defaultpyPath = os.path.join(addonPath,'default.py')
@@ -78,8 +88,11 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			sys.argv[2] = '?' + self.slideshow_path.split('?')[-1] + '&plugin_slideshow_ss=true'
 			#print sys.argv[2]
 			sys.path.insert(0,addonPath)
-			execfile(defaultpyPath,globals())
-			items = xbmcplugin.FINAL_ITEMS
+			glb = globals().copy() #make a copy of the current globals() so we can pass the expected stuff
+			sys.modules['xbmcplugin'] = fakexbmcplugin
+			glb.update({'xbmcplugin':fakexbmcplugin,'__name__':'__main__'}) #force __name__ and make sure xbmcplugin is ours
+			execfile(defaultpyPath,glb)
+			items = fakexbmcplugin.FINAL_ITEMS
 		else:
 			try:
 				import ShareSocial #@UnresolvedImport
@@ -101,7 +114,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			shares = target.provide('imagestream',uid)
 			if not shares: return []
 			for s in shares:
-				items.append(s.media)
+				items.append({'url':s.media,'title':s.title})
 		if self.slideshow_random: random.shuffle(items)
 		return items
 
@@ -111,10 +124,12 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		xbmcgui.Window(self.winid).setProperty('SlideView.Dim', self.slideshow_dim)
 		cur_img = self.image1
 		next_img = self.image2
-		cur_img.setImage(items[-1])
+		cur_img.setImage(items[-1]['url'])
 		while (not xbmc.abortRequested) and (not self.stop):
-			for img in items:
+			for item in items:
+				img = item['url']
 				if self.slideshow_effect == "2": cur_img.setImage(img)
+				if self.slideshow_titles: self.title.setLabel(item['title'])
 				if cur_img == self.image1:
 					if self.slideshow_effect == "0":
 						xbmcgui.Window(self.winid).setProperty('SlideView.Slide1', '0')
@@ -178,7 +193,6 @@ class MyMonitor(xbmc.Monitor): #@UndefinedVariable
 	
 def checkShareSocial(ss):
 	from distutils.version import StrictVersion
-	print ss.__version__
 	if StrictVersion(ss.__version__) < StrictVersion('0.2.0'): return False
 	return True
 	
