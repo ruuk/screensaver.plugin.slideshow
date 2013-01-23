@@ -120,6 +120,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 
 	def show(self, items):
 		if not items: return
+		log('Showing %s items' % len(items))
 		# set window properties for the skin
 		xbmcgui.Window(self.winid).setProperty('SlideView.Dim', self.slideshow_dim)
 		cur_img = self.image1
