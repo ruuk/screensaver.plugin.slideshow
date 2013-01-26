@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="screensaver.plugin.slideshow"
-       name="Plugin Slideshow"
-       version="0.0.5"
-       provider-name="Rick Phillips (ruuk)">
+<addon id="screensaver.plugin.slideshow" name="Plugin Slideshow" version="0.0.6" provider-name="Rick Phillips (ruuk)">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
   </requires>

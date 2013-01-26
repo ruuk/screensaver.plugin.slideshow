@@ -1,6 +1,10 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.5
+Current Version : 0.0.6
+
+** 0.0.6 ***
+
+Rename xbmcplugin.py to fakexbmcplugin.py (thought I already did that, hmm...)
 
 ** 0.0.5 ***
 
