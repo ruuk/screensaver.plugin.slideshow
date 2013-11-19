@@ -1,6 +1,10 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.6
+Current Version : 0.0.7
+
+** 0.0.7 ***
+
+Fix for non-latin characters in URLs
 
 ** 0.0.6 ***
 

@@ -66,9 +66,9 @@ def addDirectoryItem(handle, url, listitem, isFolder=False, totalItems=0):
 			break
 	"""
 	if isFolder:
-		FOLDERS.append(url)
+		FOLDERS.append(url.encode('utf-8'))
 	else:
-		ITEMS.append({'url':url,'title':listitem.getLabel()})
+		ITEMS.append({'url':url.encode('utf-8'),'title':listitem.getLabel()})
 	return bool
 
 #noinspection PyUnusedLocal
