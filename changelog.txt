@@ -1,6 +1,10 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.7
+Current Version : 0.0.8
+
+** 0.0.8 ***
+
+Version change to fix repo
 
 ** 0.0.7 ***
 
