@@ -1,6 +1,17 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.8
+Current Version : 0.0.9
+
+** 0.0.9 ***
+
+Animated loading indicator
+Added progress percent on loading indicator (when available)
+Fix for error image not displaying on error
+Added some code for better pre-loading of images
+Improved exiting screensaver when loading plugin images
+Converted strings.xml to strings.po
+Updated addon.xml for Gotham
+Added missing XML declarations
 
 ** 0.0.8 ***
 

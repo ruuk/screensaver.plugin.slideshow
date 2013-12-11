@@ -29,10 +29,17 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.conts()
 		items = None
 		try:
+			#xbmc.sleep(2000)
 			#raise Exception('Test Exception')
 			items = self.items()
 			self.getControl(10).setVisible(False)
+		except SystemExit:
+			self.exit()
+			return
 		except:
+			if self.stop or xbmc.abortRequested:
+				self.exit()
+				return
 			import traceback
 			traceback.print_exc()
 			err = str(sys.exc_info()[1])
@@ -44,12 +51,17 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 	def onAction(self,action):
 		self.exit()
 		
+	def setWinProperty(self,prop,val):
+		xbmcgui.Window(self.winid).setProperty(prop, val)
+		
 	def setError(self,msg=''):
-		self.getControl(100).setImage('plugin-ss-screensaver-error.png')
+		self.setWinProperty('stop_animation','1')
+		self.setWinProperty('loading_image','plugin-ss-screensaver-error.png')
 		error = 'ERROR: %s' % msg
 		self.getControl(101).setLabel(error)
 		log(error)
 		cont = self.getControl(10)
+		self.setWinProperty('stop_animation','1')
 		x = 608 ; y=328
 		while (not xbmc.abortRequested) and (not self.stop):
 			xbmc.sleep(1000)
@@ -65,6 +77,8 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.Monitor = MyMonitor(action = self.exit)
 		self.image1 = self.getControl(1)
 		self.image2 = self.getControl(2)
+		self.preImage1 = self.getControl(3)
+		self.preImage2 = self.getControl(4)
 		self.title = self.getControl(200)
 		self.slideshow_type = __addon__.getSetting('type')
 		self.slideshow_path = __addon__.getSetting('path')
@@ -78,6 +92,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		if self.slideshow_path.startswith('plugin://'):
 			addonName = self.slideshow_path.split('://')[-1].split('/')[0]
 			fakexbmcplugin.addonID = addonName
+			fakexbmcplugin.WINID = self.winid
 			localAddonsPath = os.path.join(xbmc.translatePath('special://home'),'addons')
 			addonPath = os.path.join(localAddonsPath,addonName)
 			defaultpyPath = os.path.join(addonPath,'default.py')
@@ -122,31 +137,33 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		if not items: return
 		log('Showing %s items' % len(items))
 		# set window properties for the skin
-		xbmcgui.Window(self.winid).setProperty('SlideView.Dim', self.slideshow_dim)
+		self.setWinProperty('SlideView.Dim', self.slideshow_dim)
 		cur_img = self.image1
 		next_img = self.image2
 		cur_img.setImage(items[-1]['url'])
 		while (not xbmc.abortRequested) and (not self.stop):
+			ct = 0
 			for item in items:
+				self.preload(items, ct)
 				img = item['url']
 				if self.slideshow_effect == "2": cur_img.setImage(img)
 				if self.slideshow_titles: self.title.setLabel(item['title'])
 				if cur_img == self.image1:
 					if self.slideshow_effect == "0":
-						xbmcgui.Window(self.winid).setProperty('SlideView.Slide1', '0')
-						xbmcgui.Window(self.winid).setProperty('SlideView.Slide2', '1')
+						self.setWinProperty('SlideView.Slide1', '0')
+						self.setWinProperty('SlideView.Slide2', '1')
 					else:
-						xbmcgui.Window(self.winid).setProperty('SlideView.Fade1', '0')
+						self.setWinProperty('SlideView.Fade1', '0')
 						if self.slideshow_effect == "2":
 							self.anim(self.winid, 1, 2, self.image1, self.image2, self.slideshow_time)
 					cur_img = self.image2
 					next_img = self.image1
 				else:
 					if self.slideshow_effect == "0":
-						xbmcgui.Window(self.winid).setProperty('SlideView.Slide2', '0')
-						xbmcgui.Window(self.winid).setProperty('SlideView.Slide1', '1')
+						self.setWinProperty('SlideView.Slide2', '0')
+						self.setWinProperty('SlideView.Slide1', '1')
 					else:
-						xbmcgui.Window(self.winid).setProperty('SlideView.Fade1', '1')
+						self.setWinProperty('SlideView.Fade1', '1')
 						if self.slideshow_effect == "2":
 							self.anim(self.winid, 2, 1, self.image2, self.image1, self.slideshow_time)
 					cur_img = self.image1
@@ -160,7 +177,14 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 					xbmc.sleep(1000)
 				if  self.stop or xbmc.abortRequested:
 					break
+				ct+=1
 
+	def preload(self,items,idx):
+		if idx >= len(items) - 1: return
+		self.preImage1.setImage(items[idx + 1]['url'])
+		if idx >= len(items) - 2: return
+		self.preImage2.setImage(items[idx + 2]['url'])
+		
 	def anim(self, winid, next_prop, prev_prop, next_img, prev_img, showtime):
 		number = random.randint(1,9)
 		posx = 0
@@ -183,6 +207,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 
 	def exit(self):
 		self.stop = True
+		fakexbmcplugin.STOP = True
 		self.close()
 
 class MyMonitor(xbmc.Monitor): #@UndefinedVariable
@@ -201,7 +226,7 @@ def chooseStream():
 	try:
 		import ShareSocial #@UnresolvedImport
 		if not checkShareSocial(ShareSocial): raise Exception('ShareSocial: Version Too Old')
-		idx = xbmcgui.Dialog().select('Choose Source',[LANG(30015),LANG(30016)])
+		idx = xbmcgui.Dialog().select('Choose Source',[LANG(32015),LANG(32016)])
 	except:
 		idx = 0
 	if idx == None: return

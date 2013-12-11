@@ -1,5 +1,5 @@
 addonID = None
-import xbmcaddon
+import xbmc, xbmcaddon, xbmcgui, sys
 
 SORT_METHOD_NONE = 0
 SORT_METHOD_LABEL = 1
@@ -41,13 +41,17 @@ ITEMS = []
 FOLDERS = []
 FINAL_ITEMS = []
 FINAL_FOLDERS = []
+COUNT = 0
+WINID = 10000
+STOP = False
 
 def reset():
-	global ITEMS, FINAL_ITEMS, FOLDERS, FINAL_FOLDERS
+	global ITEMS, FINAL_ITEMS, FOLDERS, FINAL_FOLDERS, COUNT
 	ITEMS = []
 	FOLDERS = []
 	FINAL_ITEMS = []
 	FINAL_FOLDERS = []
+	COUNT = 0
 	
 #noinspection PyUnusedLocal
 def addDirectoryItem(handle, url, listitem, isFolder=False, totalItems=0):
@@ -65,6 +69,13 @@ def addDirectoryItem(handle, url, listitem, isFolder=False, totalItems=0):
 		if not xbmcplugin.addDirectoryItem(int(sys.argv[1]), 'F:\\Trailers\\300.mov', listitem, totalItems=50):
 			break
 	"""
+	global COUNT, STOP
+	if STOP or xbmc.abortRequested: sys.exit()
+	if totalItems:
+		COUNT += 1
+		progress = int((COUNT/float(totalItems)) * 100)
+		xbmcgui.Window(WINID).setProperty('pss_progress',str(progress))
+	
 	if isFolder:
 		FOLDERS.append(url.encode('utf-8'))
 	else:
