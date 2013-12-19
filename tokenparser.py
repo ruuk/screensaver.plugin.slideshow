@@ -10,15 +10,17 @@ class TokenParser:
 	
 	
 	def parse(self,text):
+		print text
 		text = re.sub('\\\\' + self.dataPostfix,'\a',text)
 		text = re.sub('\\\\' + self.dataSep,'\b',text)
 		for token in self.tokens:
-			pattern = '\\{tpre}(?P<token>{token})\\{dpre}(?P<data>[^\\{dpost}]*)\\{dpost}'.format(tpre=self.tokenPrefix,token=token,dpre=self.dataPrefix,dpost=self.dataPostfix)
+			pattern = '{tpre}(?P<token>{token}){dpre}(?P<data>[^{dpost}]*){dpost}'.format(tpre=re.escape(self.tokenPrefix),token=token,dpre=re.escape(self.dataPrefix),dpost=re.escape(self.dataPostfix))
 			text = re.sub(pattern,self.replacer,text)
 		return text
 		
 	def replacer(self,m):
 		data = m.group('data').split(self.dataSep)
+		print m.group(0)
 		for x in range(len(data)):
 			data[x] = data[x].replace('\a',self.dataPostfix)
 			data[x] = data[x].replace('\b',self.dataSep)

@@ -153,7 +153,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 					caption = item['title']
 					if self.slideshow_advanced_caption:
 						tokenParser = tokenparser.TitleTokenParser(item['title'].strip(),getEXIF(img))
-						caption = tokenParser.parse('$TITLE[TES]$DATETIME[%a %b %d @ %I:%M %p, - ]$EXIF[Model, with ]')
+						caption = tokenParser.parse(self.slideshow_caption_template)
 					self.title.setLabel(caption)
 				if cur_img == self.image1:
 					if self.slideshow_effect == "0":
