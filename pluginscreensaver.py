@@ -1,6 +1,6 @@
-import sys
-import xbmcaddon, random
-import xbmcgui, xbmc, os
+import sys, time, os, random
+import xbmcaddon, xbmcgui, xbmc, xbmcvfs
+import exifread, tokenparser
 
 #Most of the screensaver code was taken from the screensaver.xbmc.slideshow addon, so thanks for that go to the authors at Team XBMC
 
@@ -84,7 +84,9 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.slideshow_path = __addon__.getSetting('path')
 		self.slideshow_effect = __addon__.getSetting('effect')
 		self.slideshow_random = __addon__.getSetting('randomize') == 'true'
-		self.slideshow_titles = __addon__.getSetting('titles') == 'true'
+		self.slideshow_caption = __addon__.getSetting('titles') == 'true'
+		self.slideshow_advanced_caption = __addon__.getSetting('advanced_caption') == 'true'
+		self.slideshow_caption_template = __addon__.getSetting('caption_template') or ''
 		self.slideshow_time = (int('%02d' % int(__addon__.getSetting('time'))) + 1) * 1000
 		self.slideshow_dim = hex(int('%.0f' % (float(__addon__.getSetting('level')) * 2.55)))[2:] + 'ffffff' # convert float to hex value usable by the skin
 
@@ -147,7 +149,12 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 				self.preload(items, ct)
 				img = item['url']
 				if self.slideshow_effect == "2": cur_img.setImage(img)
-				if self.slideshow_titles: self.title.setLabel(item['title'])
+				if self.slideshow_caption:
+					caption = item['title']
+					if self.slideshow_advanced_caption:
+						tokenParser = tokenparser.TitleTokenParser(item['title'].strip(),getEXIF(img))
+						caption = tokenParser.parse('$TITLE[TES]$DATETIME[%a %b %d @ %I:%M %p, - ]$EXIF[Model, with ]')
+					self.title.setLabel(caption)
 				if cur_img == self.image1:
 					if self.slideshow_effect == "0":
 						self.setWinProperty('SlideView.Slide1', '0')
@@ -240,7 +247,21 @@ def chooseStream():
 		provider = sm.askForProvider('imagestream',overlay=True)
 		if not provider: return
 		__addon__.setSetting('path',provider.targetID())
-	
+
+def getEXIF(path):
+	if xbmcvfs.exists(path):
+		try:
+			f = xbmcvfs.File(path) # @UndefinedVariable
+			tags = exifread.process_file(f)
+			f.close()
+			return tags
+		except:
+			import traceback
+			traceback.print_exc()
+			return None
+	else:
+		return None
+
 if __name__ == '__main__':
 	if len(sys.argv) > 1 and sys.argv[1] == 'resetpath':
 		__addon__.setSetting('path','addons://sources/image')
@@ -251,3 +272,4 @@ if __name__ == '__main__':
 		del Screensaver
 		del MyMonitor
 
+	

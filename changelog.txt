@@ -1,6 +1,11 @@
 Plugin Slideshow Screensaver Changelog
 
-Current Version : 0.0.9
+Current Version : 0.0.10
+
+** 0.0.10 ***
+
+Added the ability to add formatted captions
+Added the ability to add exif information in captions
 
 ** 0.0.9 ***
 
