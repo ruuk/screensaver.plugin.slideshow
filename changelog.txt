@@ -4,7 +4,7 @@ Current Version : 0.0.11
 
 ** 0.0.11 ***
 
-Fix for format in settings not affecting output
+Fix for caption format in settings not affecting output
 
 ** 0.0.10 ***
 

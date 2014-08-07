@@ -1,4 +1,4 @@
-import sys, time, os, random
+import sys, os, random
 import xbmcaddon, xbmcgui, xbmc, xbmcvfs
 import exifread, tokenparser
 
@@ -21,6 +21,13 @@ def log(txt):
 
 log('Version: ' + __addon__.getAddonInfo('version'))
 
+class MyMonitor(xbmc.Monitor):
+	def __init__( self, *args, **kwargs ):
+		self.action = kwargs['action']
+
+	def onScreensaverDeactivated(self):
+		self.action()
+
 class Screensaver(xbmcgui.WindowXMLDialog):
 	def __init__( self, *args, **kwargs ):
 		pass
@@ -33,8 +40,10 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			#raise Exception('Test Exception')
 			items = self.items()
 			self.getControl(10).setVisible(False)
+			self.show(items)
 		except SystemExit:
 			self.exit()
+			log('SystemExit')
 			return
 		except:
 			if self.stop or xbmc.abortRequested:
@@ -44,9 +53,6 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			traceback.print_exc()
 			err = str(sys.exc_info()[1])
 			self.setError(err)
-			
-		if items:
-			self.show(items)
 
 	def onAction(self,action):
 		self.exit()
@@ -216,13 +222,6 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.stop = True
 		fakexbmcplugin.STOP = True
 		self.close()
-
-class MyMonitor(xbmc.Monitor): #@UndefinedVariable
-	def __init__( self, *args, **kwargs ):
-		self.action = kwargs['action']
-
-	def onScreensaverDeactivated(self):
-		self.action()
 	
 def checkShareSocial(ss):
 	from distutils.version import StrictVersion
