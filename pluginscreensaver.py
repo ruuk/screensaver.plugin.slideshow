@@ -1,4 +1,4 @@
-import sys, os, random
+import sys, os, random, re
 import xbmcaddon, xbmcgui, xbmc, xbmcvfs
 import exifread, tokenparser
 
@@ -8,7 +8,7 @@ if 'xbmcplugin' in sys.modules:
 	del(sys.modules["xbmcplugin"])
 import fakexbmcplugin
 fakexbmcplugin.reset()
-	
+
 __addon__	= xbmcaddon.Addon()
 __addonid__  = __addon__.getAddonInfo('id')
 LANG = __addon__.getLocalizedString
@@ -21,6 +21,18 @@ def log(txt):
 
 log('Version: ' + __addon__.getAddonInfo('version'))
 
+def getPluginLibPath(plugin_path):
+	sub = 'default.py'
+	with open(os.path.join(plugin_path,'addon.xml'),'r') as f:
+		xml = f.read()
+		try:
+			sub = re.search('library="([^"]*?)"',re.search('(?s)<extension[^>]*xbmc.python.pluginsource[^>].*?>',xml).group(0)).group(1)
+		except AttributeError:
+			pass
+	lib = os.path.join(plugin_path,sub)
+	if os.path.exists(lib): return lib
+	return None
+
 class MyMonitor(xbmc.Monitor):
 	def __init__( self, *args, **kwargs ):
 		self.action = kwargs['action']
@@ -31,7 +43,7 @@ class MyMonitor(xbmc.Monitor):
 class Screensaver(xbmcgui.WindowXMLDialog):
 	def __init__( self, *args, **kwargs ):
 		pass
-	
+
 	def onInit(self):
 		self.conts()
 		items = None
@@ -56,10 +68,10 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 
 	def onAction(self,action):
 		self.exit()
-		
+
 	def setWinProperty(self,prop,val):
 		xbmcgui.Window(self.winid).setProperty(prop, val)
-		
+
 	def setError(self,msg=''):
 		self.setWinProperty('stop_animation','1')
 		self.setWinProperty('loading_image','plugin-ss-screensaver-error.png')
@@ -76,7 +88,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			x = random.randint(16,1200)
 			y = random.randint(16,440)
 			cont.setPosition(x,y)
-			
+
 	def conts(self):
 		self.winid = xbmcgui.getCurrentWindowDialogId()
 		self.stop = False
@@ -103,7 +115,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			fakexbmcplugin.WINID = self.winid
 			localAddonsPath = os.path.join(xbmc.translatePath('special://home'),'addons')
 			addonPath = os.path.join(localAddonsPath,addonName)
-			defaultpyPath = os.path.join(addonPath,'default.py')
+			libPath = getPluginLibPath(addonPath)
 			if len(sys.argv) < 2:
 				sys.argv.append(1)
 			if len(sys.argv) < 3:
@@ -114,7 +126,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 			glb = globals().copy() #make a copy of the current globals() so we can pass the expected stuff
 			sys.modules['xbmcplugin'] = fakexbmcplugin
 			glb.update({'xbmcplugin':fakexbmcplugin,'__name__':'__main__'}) #force __name__ and make sure xbmcplugin is ours
-			execfile(defaultpyPath,glb)
+			execfile(libPath,glb)
 			items = fakexbmcplugin.FINAL_ITEMS
 		else:
 			try:
@@ -197,7 +209,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.preImage1.setImage(items[idx + 1]['url'])
 		if idx >= len(items) - 2: return
 		self.preImage2.setImage(items[idx + 2]['url'])
-		
+
 	def anim(self, winid, next_prop, prev_prop, next_img, prev_img, showtime):
 		number = random.randint(1,9)
 		posx = 0
@@ -222,12 +234,12 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 		self.stop = True
 		fakexbmcplugin.STOP = True
 		self.close()
-	
+
 def checkShareSocial(ss):
 	from distutils.version import StrictVersion
 	if StrictVersion(ss.__version__) < StrictVersion('0.2.0'): return False
 	return True
-	
+
 def chooseStream():
 	try:
 		import ShareSocial #@UnresolvedImport
@@ -271,4 +283,3 @@ if __name__ == '__main__':
 		del Screensaver
 		del MyMonitor
 
-	
