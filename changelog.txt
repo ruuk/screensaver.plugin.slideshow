@@ -1,5 +1,9 @@
 Plugin Slideshow Screensaver Changelog
 
+** 0.0.13 ***
+
+Fixes for errors with some plugins
+
 ** 0.0.12 ***
 
 Now works with plugins that don't use default.py
