@@ -1,5 +1,9 @@
 Plugin Slideshow Screensaver Changelog
 
+** 0.0.14 ***
+
+Fix for modules not being added to import path on Helix causing import errors
+
 ** 0.0.13 ***
 
 Fixes for errors with some plugins

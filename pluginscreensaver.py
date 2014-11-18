@@ -1,6 +1,8 @@
 import sys, os, random, re
 import xbmcaddon, xbmcgui, xbmc, xbmcvfs
-import exifread, tokenparser
+import exifread
+import tokenparser
+import addonutil
 
 #Most of the screensaver code was taken from the screensaver.xbmc.slideshow addon, so thanks for that go to the authors at Team XBMC
 
@@ -138,6 +140,16 @@ class Screensaver(xbmcgui.WindowXMLDialog):
 
             xbmcaddon.Addon = xbmcaddon_Addon_Wrapper
             sys.path.insert(0,addonPath)
+
+            try:
+                #Add all the module paths to sys.path
+                for p in addonutil.getAddonDependencyPaths(addonName):
+                    if p in sys.path: continue
+                    sys.path.insert(0,p)
+            except:
+                import traceback
+                log(traceback.format_exc())
+
             glb = globals().copy() #make a copy of the current globals() so we can pass the expected stuff
             sys.modules['xbmcplugin'] = fakexbmcplugin
             sys.modules['xbmcaddon'] = xbmcaddon
