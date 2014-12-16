@@ -1,5 +1,10 @@
 Plugin Slideshow Screensaver Changelog
 
+** 0.0.16 ***
+
+Fix for settings being grayed out
+Fix for broken 'Source Path' selection in settings
+
 ** 0.0.15 ***
 
 Fix for source path not being selectable on Helix
