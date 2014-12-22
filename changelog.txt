@@ -1,5 +1,9 @@
 Plugin Slideshow Screensaver Changelog
 
+** 0.0.17b ***
+
+Changed "Amount Of Seconds To Display Each Image" setting to allow up to 30 seconds
+
 ** 0.0.16 ***
 
 Fix for settings being grayed out

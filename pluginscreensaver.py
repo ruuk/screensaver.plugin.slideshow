@@ -107,7 +107,7 @@ class Screensaver(xbmcgui.WindowXMLDialog):
         self.slideshow_caption = __addon__.getSetting('titles') == 'true'
         self.slideshow_advanced_caption = __addon__.getSetting('advanced_caption') == 'true'
         self.slideshow_caption_template = __addon__.getSetting('caption_template') or ''
-        self.slideshow_time = (int('%02d' % int(__addon__.getSetting('time'))) + 1) * 1000
+        self.slideshow_time = (int('%02d' % int(__addon__.getSetting('time')))) * 1000
         self.slideshow_dim = hex(int('%.0f' % (float(__addon__.getSetting('level')) * 2.55)))[2:] + 'ffffff' # convert float to hex value usable by the skin
 
     def items(self):
